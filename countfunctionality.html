@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Greeting Component</title>
+    <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+<script type="text/babel">
+    let value=React.useState(90)
+    function  Greeting(){
+            return(
+                value[1](value[0]+8)
+            )
+    }
+    function App(){
+        return(
+            <div>
+            <p>Count {value[0]}</p>
+            <button onClick={Greeting} s='add'>Add</button>
+            </div>
+        )
+    }
+    ReactDOM.createRoot(document.querySelector('#root')).render(<App />) 
+</script>
