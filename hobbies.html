@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" >
+   // import {useState} from 'react' rafc-it'll create a function component in react.
+    const {useState}=React
+    function Input({onChang=''}){
+        return<>
+            <input type="text" onChange={onChang} placeholder='Enter Your Hobbie'/>
+        </>
+    }
+    function Button({onClick=()=>{},label='', dataValue=''}){
+        return<>
+           <button onClick={onClick} data-value={dataValue}  >{label}</button>
+        </>
+    }
+    function Hobbies(){
+        const [arr,setArr]=React.useState([''])
+        function handleAdd(){
+            const newarr=[...arr,'']
+            setArr(newarr)
+        }
+        function handleRemove(e){
+        const ix=Number(e.target.getAttribute('data-value'))
+        console.log(ix)
+        console.log(arr[ix])
+        const newArr=arr.filter((ele,i)=>ele!==arr[ix])
+        //setArr(prevItems=>prevItems.filter(ele=>ele!==arr[ix]))
+       setArr(newArr)
+        }
+        function handleChange(e,index){
+          //const newArr= [...arr, e.target.value]
+          arr[index]=e.target.value
+          setArr(newArr)
+
+        }
+        function onSubmit(){
+
+          console.log(arr)
+        }
+
+        return<>
+               <h1>write you hobbies dude</h1>
+             <div>{arr.map((ele,index)=><div>
+              <Input key={index} onChang={e=>handleChange(e,index) } value={ele} />
+              <Button onClick={handleRemove} dataValue={index} label='X'/> 
+
+              </div>)}
+             <Button onClick={handleAdd} dataVvalue='sure'  label='Add'/> 
+             <Button onClick={onSubmit} dataValue='tro'  label='Submit'/> 
+
+            </div>
+        </>
+    }
+    ReactDOM.createRoot(document.querySelector('#root')).render(<Hobbies/>)
+  </script>
+</html>
