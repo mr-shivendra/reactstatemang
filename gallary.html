@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallary</title>
+    <style>
+        #gallary{
+            width:80%;
+            display:flex;
+            flex-wrap: wrap;
+            margin:5% auto;
+            gap:8px;
+        }
+        img{
+          width:100%;
+          height:100%;
+          object-fit:cover
+        }
+        #Remove{
+          position: absolute; 
+          right: 0;
+          z-index: 3;
+        }
+        h1{
+          text-align: center;
+        }
+        .tools{
+         text-align: center;
+         position: absolute;
+         bottom: 30px;
+         width: 100%;
+         
+        }
+        .images{
+          position: relative; 
+          z-index: 1;
+        }
+
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" >
+    const {useState}=React
+    function Gallary(){
+         const [gallarys,setGallarys]=useState([])
+         const [childs,setChilds]=useState('')
+         let i=0
+        function handleRemove(e){
+            const index=Number(e.target.getAttribute('data-value'))
+            const newGallarys=gallarys.filter((ele,ids)=>ids!==index)
+            setGallarys(newGallarys)
+        }
+       // console.log(gallarys)
+        function handleAdd(){
+            const newGallarys=[...gallarys]
+            newGallarys.push(childs)
+            document.querySelector('input').value=''
+            setGallarys(newGallarys)
+            setChilds('')
+            i++
+        }
+        function handleChange(e){
+            const newChilds=`${e.target.value}`
+            setChilds(newChilds)
+        }
+
+        return<>
+        <h1>Gallary</h1>
+        <div class="tools">
+        <input type="text" onChange={handleChange} placeholder='Enter Your Image Address'/>
+        <button onClick={handleAdd}>Add</button>
+        </div>
+        <div id='gallary'>
+           {gallarys.map((ele,idx)=><div class='images'> 
+                <img src={ele} alt='loading...'/>
+                <button onClick={handleRemove}  id='Remove' data-value={idx}>X</button>
+            </div>
+         )}
+        </div>
+        </>
+    }
+
+    ReactDOM.createRoot(document.querySelector('#root')).render(<Gallary/>)
+  </script>
