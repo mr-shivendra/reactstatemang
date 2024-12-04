@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+        .parts{
+            width:70%;
+            margin:100px auto;
+        }
+        .scored,h1{
+            font-size: xx-large;
+            font-weight: 900;
+        }
+        h1{
+            text-align: center;
+        }
+        .questionForum{
+            text-align: center;
+            font-size: x-large;
+            font-weight: bold;
+            margin:30px auto;
+        }
+        .optionsForum{
+            display:grid;
+            grid-template-columns: repeat(2,1fr);
+            width:60%;
+            gap:8px;
+            margin: 30px auto;
+            align-items: center;
+        }
+        .Buttons{
+            width:70%;
+            display:flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 30px auto;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" >
+    const {useState} =React
+ 
+    const arr=[
+       {
+           Question:'who is the father of india?',
+           options:['Mahatma Gandhi','Narendra Modi','soniya Gandhi', 'all of these'],
+           answer:'Mahatma Gandhi'
+       },
+       {
+           Question:'who is the father of indiass?',
+           options:['Mahatma Gandhi','Narendra Modi','soniya Gandhi', 'all of these'],
+           answer:'Mahatma Gandhi'
+       },
+       {
+           Question:'who is the father of indiax?',
+           options:['Mahatma Gandhi','Narendra Modi','soniya Gandhi', 'all of these'],
+           answer:'Mahatma Gandhi'
+       },
+       {
+           Question:'who is the father of indias?',
+           options:['Mahatma Gandhi','Narendra Modi','soniya Gandhi', 'all of these'],
+           answer:'Mahatma Gandhi'
+       },
+       {
+           Question:'who is the father of indiap?',
+           options:['Mahatma Gandhi','Narendra Modi','soniya Gandhi', 'all of these'],
+           answer:'Mahatma Gandhi'
+       },
+       {
+           Question:'who is the father of indiaq?',
+           options:['Mahatma Gandhi','Narendra Modi','soniya Gandhi', 'all of these'],
+           answer:'Mahatma Gandhi'
+       }
+   ]
+   function App(){
+       const [score,setScore]=useState(0)
+       const [index,setIndex]=useState(0)
+       const currentQuestion=arr[index]
+       const {Question,options,answer}={...currentQuestion}
+       function nextQuestion(){
+        if(index>=arr.length-1){
+            return;
+        }
+          setIndex(index+1)
+       }
+       function prevQuestion(){
+        if(index<=0){
+            return;
+        }
+          setIndex(index-1)
+       }
+       function handleAnswer(e){
+        const value=e.target.getAttribute('data-value')
+        console.log(value)
+        if(value==answer){
+            setScore(score+1)
+        }
+        nextQuestion()
+       }
+       function handleReset(){
+        window.location.reload()
+       }
+       return<div class='parts'>
+         <h1>Quiz Time</h1>
+         <div class="scored">Score-{score}</div>
+         <div className='questionForum'>{Question}</div>
+         <div className='optionsForum'>
+           {options.map((ele,idx)=><button key={ele} onClick={handleAnswer} data-value={ele}>{ele}</button>)}
+         </div>
+         <div className='Buttons'>
+            <button onClick={prevQuestion}>Previous</button>
+            <button onClick={handleReset}>Reaset</button>
+            <button onClick={nextQuestion}>Next</button>
+        </div>
+       </div>
+   }
+   ReactDOM.createRoot(document.querySelector('#root')).render(<App/>)
+  </script>
+</html>
