@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+      table{
+        width:80%;
+        margin:auto;
+      }
+      #heading{
+        font-size:30px;
+        font-weight: bold;
+      }
+      .navBar{
+        width:60%;
+        display:flex;
+        justify-content: space-evenly;
+        margin:30px auto;}
+      .listhead{
+        width:70%;
+        display:flex;
+        justify-content: space-between;
+        font-size: x-large;
+        font-weight: bold;
+        text-align: center;
+        margin:20px auto;
+      }
+      .list{
+        width:70%;
+        display:flex;
+        justify-content: space-between;
+        font-size: x-large;
+        /* text-align: center; */
+        margin:20px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    // Your  code will go here
+    const {useState,useEffect}= React
+    let showStatusCount=0;
+    function Input({onChange='', value='',type='',placeholder=''}){
+        return<>
+        <input type={type}  onChange={onChange}  placeholder={placeholder}/>
+        </>
+    }
+    function Button({onClick=()=>{},label='',dataValue=''}){
+        return<>
+           <button onClick={onClick}   data-Value={dataValue}>{label}</button>
+        </>
+    }
+    function Todo(){
+        const [task,setTask]=React.useState([])
+        const [newTask,setNewTask]=React.useState({task:'',status:''})
+        const [status,setStatus]=React.useState(task)
+
+        // console.log(newTask)
+        // console.log(task)
+        function handleTaskChange(e){
+          const taskValue=e.target.value 
+          console.log(taskValue)
+          setNewTask({...newTask,task:taskValue})        }
+        function handleClick(){
+               // const statusValue=e.target.getAttribute('data-value')
+               // console.log(statusValue)
+                // setNewTask({...newTask,status:statusValue})
+                const newArr=[...task]
+                newArr.push(newTask)
+                setTask(newArr)
+                setNewTask({...newTask,task:''})
+                document.querySelector('input').value=''
+        }
+        function handleRemove(e){
+            const yx=e.target.getAttribute('data-Value')
+            const newarr=task.filter(ele=>ele.task!=yx)
+            const newStatus=status.filter(ele=>ele.task!=yx)
+            setTask(newarr)
+            setStatus(newStatus)
+        }
+        function handleStatusChanges(e){
+          const statusValue=e.target.value
+          console.log(statusValue)
+          setNewTask({...newTask,status:statusValue})
+        }
+        function handleSelectShow(e){
+          showStatusCount++
+          const showStatusValue=e.target.value
+          if(showStatusValue==='All'){
+           // console.log(task)
+            setStatus(task)
+          }else if(showStatusValue==='Active'){
+            const activesTask=task.filter(ele=>ele.status==='Active')
+            setStatus(activesTask)
+          }else if(showStatusValue==='Completed'){
+            const completedTask=task.filter(ele=>ele.status==='Completed')
+            // console.log(completedTask)
+            setStatus(completedTask)
+        }
+      }
+        useEffect(()=>{
+          if(showStatusCount<=1){setStatus(task)}
+        },[task])
+        return<>
+          <div className='navBar'>
+            <span id='heading'>TODO LIST</span>
+            <Input onChange={(e)=>handleTaskChange(e)}  type='text' placeholder='Enter Your task'/> 
+            <select onChange={handleStatusChanges}>
+              <option value="All">Status</option>
+              <option value="Completed">Completed</option>
+              <option value="Active">Active</option>
+            </select>       
+            <Button onClick={handleClick} label="Submit" />
+          </div>
+          
+            <div className="listhead"><span>S.no</span><span>Task</span>
+              <span>
+                <select onChange={handleSelectShow}>
+                  <option value="All">All</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Active">Active</option>
+                </select>
+              </span> 
+              <span>Remove</span></div>
+            <div >
+            {status.map((ele,idx)=><div className='list'> 
+              <span>{idx+1}</span>  
+              <span> {ele.task} </span> 
+              <span>{ele.status} 
+                </span>
+              <Button onClick={handleRemove} dataValue={ele.task} label='Remove'/>
+              </div>)}
+          </div>
+            </>
+    }
+    ReactDOM.createRoot(document.querySelector('#root')).render(<Todo />)
+  </script>
+</html>
