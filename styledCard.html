@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+        .stuffs{
+            width:40%;
+            display:flex;
+            justify-content: space-around;
+            margin:20px auto;
+        }
+        h1{
+            font-weight:bolder;
+            text-align: center;
+        }
+        .CardList{
+            width:85%;
+            margin:30px auto;
+            overflow:auto;
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            /* border: 1px solid grey; */
+            padding:20px;
+            gap:15px;
+            /* height:450px; */
+        }
+        .card{
+            padding: 40px;
+            /* border:1px solid green; */
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+            border-radius: 8px;
+        }
+        .greetings{
+            margin:30px auto;
+            text-align: center;
+            font-size: xx-large;
+            font-weight: bold;
+        }
+        .names{
+            text-align: center;
+            font-size: large;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const {useState}=React
+    // Your  code will go here
+    function Greetings({arr}){
+        return<div className='CardList'>
+            {arr.map((ele,idx)=><div className='card'>
+                <div className="greetings">
+                    {ele.message}
+                </div>
+                <div className="names">
+                    {ele.name}
+                </div>
+            </div>)}
+        </div>
+    }
+    function App(){
+        const [messageArr,setMessageArr]=useState({message:'',name:''})
+        const [arr,setArr]=useState([])
+        function handleGreetingsChange(e){
+            const newMessage=e.target.value
+            setMessageArr({...messageArr,message:newMessage})
+        }
+        function handleNameChange(e){
+            const newName=e.target.value
+            setMessageArr({...messageArr,name:newName})
+        }
+        function handleAdd(){
+            setArr([...arr,messageArr])
+            document.querySelectorAll('input')[0].value=''
+            document.querySelectorAll('input')[1].value=''
+        }
+        return<>
+          <div className="stuffs">
+           Greetings-<input type="text" onChange={handleGreetingsChange} placeholder='Enter Your Greetings'/>
+            To-<input type="text" onChange={handleNameChange} placeholder='Enter Your name'/>
+            <button onClick={handleAdd}>Submit</button>  
+          </div>
+          <h1> Cards</h1>
+            <Greetings arr={arr}/>
+        </>
+    }
+    ReactDOM.createRoot(document.querySelector('#root')).render(<App/>)
+  </script>
+</html>
