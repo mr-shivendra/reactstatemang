@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+      h1{
+        text-align: center;
+
+      }
+      .forms{
+        width:30%;
+        margin:30px auto;
+      }
+      form{
+        width:100%;
+        display: flex;
+        justify-content: space-around;
+      }
+      .headerTask{
+        width:80%;
+        display:flex;
+        justify-content: space-around;
+        margin: auto;
+        font-size: x-large;
+        font-weight: bold;
+      }
+      .List{
+        width:80%;
+        display:flex;
+        justify-content: space-around;
+        margin:20px auto;
+        font-size:large;
+        font-weight: bold;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const {useState} =React
+    function Forms({prop}){
+        const [handleSubmit,handleChange,obj]=prop
+        return <div className='forms'>
+            <form onSubmit={handleSubmit}>
+                <input type="text" placeholder='Enter Your Task' name='Task' value={obj.name} onChange={handleChange}/>
+                <input type="Submit"/>
+            </form>
+        </div>
+    }
+    function TodoList({arrays}){
+      const [arr,setArr]=arrays
+      const [isChecked,setIsChecked]=useState([])
+      function handleChanges(event){
+        console.log(event.target.value,event.target.checked)
+        if(event.target.checked){
+          setIsChecked([...isChecked,event.target.value])
+        }else{
+          setIsChecked([...isChecked.filter(ele=>ele!==event.target.value)])
+        }
+      }
+      function handleRemove(e){
+        const data=e.target.getAttribute('data-value')
+        console.log(data)
+        const newArr=arr.filter(ele=>ele.Task!==data)
+        setArr(newArr)
+      }
+      return <div className='Too'> 
+        <div class="headerTask"><span>Task</span><span>completed</span><span>Remove</span></div>  
+          {arr.map((ele,idx)=><div className='List'>
+            <label htmlFor={ele.Task} >{ele.Task}</label>
+            <input type='checkbox' id={ele.Task}  onChange={handleChanges} value={ele.Task} />
+            <button onClick={handleRemove} data-value={ele.Task}>Remove</button>
+          </div>)}
+      </div>
+    }
+    function App(){
+       // const [formData,setFormData]=useState({})
+        const [arr,setArr]=useState([])
+        const obj={}
+        console.log(arr)
+        function handleSubmit(event){
+            event.preventDefault()
+            setArr([...arr,obj])
+            document.querySelector('form').reset()
+            // console.log('Form Submitted',formData)
+        }
+        function handleChange(event){
+             const {name,value}=event.target
+            // setFormData(()=>({
+            //     ...formData,
+            //     [name]:value
+            // }))
+            obj[name]=value
+            //console.log(obj)
+        }
+        return<>
+        <h1>Todo List</h1>
+        <Forms prop={[handleSubmit,handleChange,obj]}/>
+        <TodoList arrays={[arr,setArr]}/>
+        </>
+    }
+    ReactDOM.createRoot(document.querySelector('#root')).render(<App/>)
+  </script>
+</html>
